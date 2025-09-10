@@ -5,7 +5,7 @@ export const Subscription = ({ onSubscribe }) => {
   const plan = {
     name: 'FitPass',
     icon: Zap,
-    price: '$49',
+    price: '$15',
     period: 'month',
     description: 'One pass, unlimited gyms, anytime, anywhere.',
     features: [
@@ -90,9 +90,7 @@ export const Subscription = ({ onSubscribe }) => {
         </div>
 
         <div className="text-center mt-12">
-          <p className="text-gray-300 mb-4">
-            All plans include a 7-day free trial. Cancel anytime.
-          </p>
+           
           <p className="text-sm text-gray-400">
             Prices exclude local taxes. Annual plans available with 20% discount.
           </p>

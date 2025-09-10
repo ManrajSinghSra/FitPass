@@ -1,5 +1,6 @@
 import React from 'react';
 import { Dumbbell, Menu, User, LogOut } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 interface HeaderProps {
   isLoggedIn: boolean;
@@ -13,11 +14,15 @@ export const Header: React.FC<HeaderProps> = ({ isLoggedIn, user, onAuthClick, o
     <header className="bg-gray-900 shadow-lg border-b border-gray-800 sticky top-0 z-50 backdrop-blur-sm bg-opacity-95">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          <div className="flex items-center space-x-2">
+          {/* Logo and Brand Name */}
+          <Link to="/" className="flex items-center space-x-2">
             <Dumbbell className="h-8 w-8 text-orange-500" />
-            <span className="text-2xl font-bold text-white">FitOnGO</span>
-          </div>
+            <span className="text-2xl font-bold text-white">
+              <Link to="/">FitOnGO</Link>
+            </span>
+          </Link>
           
+          {/* Navigation Links */}
           <nav className="hidden md:flex space-x-8">
             <a href="#gyms" className="text-gray-300 hover:text-orange-500 font-medium transition-colors">
               Find Gyms
@@ -28,8 +33,12 @@ export const Header: React.FC<HeaderProps> = ({ isLoggedIn, user, onAuthClick, o
             <a href="#about" className="text-gray-300 hover:text-orange-500 font-medium transition-colors">
               About
             </a>
+            <Link to="/fitpass" className="text-gray-300 hover:text-orange-500 font-medium transition-colors">
+              FitPass
+            </Link>
           </nav>
 
+          {/* User Actions */}
           <div className="flex items-center space-x-4">
             {isLoggedIn ? (
               <div className="flex items-center space-x-3">

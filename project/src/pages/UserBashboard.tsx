@@ -8,7 +8,7 @@ export const UserDashboard = () => {
   const [user, setUser] = useState({
     name: 'Alex Thompson',
     email: 'alex@example.com',
-    subscription: 'Unlimited',
+    subscription: 'FitPass',
   });
 
   const stats = {
@@ -90,7 +90,7 @@ export const UserDashboard = () => {
             </div>
           </div>
           
-          <div className="bg-gray-800 rounded-xl p-6 border border-gray-700">
+          {/* <div className="bg-gray-800 rounded-xl p-6 border border-gray-700">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-400">Access Tokens</p>
@@ -99,7 +99,7 @@ export const UserDashboard = () => {
               </div>
               <Zap className="h-8 w-8 text-yellow-400" />
             </div>
-          </div>
+          </div> */}
         </div>
 
         {/* Tabs */}
@@ -222,9 +222,7 @@ export const UserDashboard = () => {
                     onChange={(e) => handleSubscriptionChange(e.target.value)}
                     className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                   >
-                    <option value="Unlimited">Unlimited Plan</option>
-                    <option value="Basic">Basic Plan</option>
-                    <option value="Premium">Premium Plan</option>
+                    <option value="FitPass">FitPass</option>
                   </select>
                 </div>
                 <button className="w-full bg-purple-600 hover:bg-purple-700 py-2 rounded-lg transition-colors">

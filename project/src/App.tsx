@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Home } from './Home';
 import { AdminDashboard } from './pages/AdminDashboard';
 import { UserDashboard } from './pages/UserBashboard';
+import { FitPass } from './pages/FitPass';
 
 function App() {
   return (
@@ -10,6 +11,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/userDasboard" element={<UserDashboard />} />
         <Route path="/admin" element={<AdminDashboard />} />
+         <Route path="/fitpass" element={<FitPass />} />
       </Routes>
     </BrowserRouter>
   );

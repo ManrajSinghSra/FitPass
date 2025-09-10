@@ -4,9 +4,9 @@ import { redisClient } from "../services/redis.js"
 export const register = async (req, res) => {
 
    try {
-      const { fullName, emailId, password } = req.body;
+      const { name, emailId, password } = req.body;
 
-      if (!fullName || !emailId || !password) {
+      if (!name || !emailId || !password) {
          throw new Error("Fields Cannot be Empty")
       }
       const error = validationResult(req)
@@ -21,7 +21,7 @@ export const register = async (req, res) => {
       }
       const hashPassword = await User.hashPassword(password)
 
-      const user = await User.create({ fullName, emailId, password: hashPassword })
+      const user = await User.create({ name, emailId, password: hashPassword })
       res.json({ message: "User is Successfully Created" })
 
    } catch (error) {

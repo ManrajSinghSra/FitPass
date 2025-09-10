@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { X, Mail, Lock, User, Phone } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
+import axios from "../config/axios.js"
+
 export const AuthModal = ({ isOpen, onClose, onAuth }) => {
   const [isSignUp, setIsSignUp] = useState(false);
   const [role, setRole] = useState('user'); // Default role is "user"
@@ -18,18 +20,30 @@ export const AuthModal = ({ isOpen, onClose, onAuth }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Simulate authentication
+     
     if (role === 'user') {
       navigate('/userDasboard');
-    } else if (role === 'gymOwner') {
+    } 
+    else if (role === 'gymOwner') {
       navigate('/admin');
     }
+    console.log(formData);
+
+
+    try {
+      
+      const res=
+    } catch (error) {
+      
+    }
+    
     onAuth({
-      name: formData.name || 'John Doe',
+      name: formData.name ,
       email: formData.email,
       role,
       subscription: role === 'user' ? 'Traveler' : 'Gym Owner'
     });
+
   };
 
   const handleChange = (e) => {
