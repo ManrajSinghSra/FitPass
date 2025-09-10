@@ -1,6 +1,6 @@
 import React from 'react';
 import { Dumbbell, Menu, User, LogOut } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 interface HeaderProps {
   isLoggedIn: boolean;
@@ -10,6 +10,13 @@ interface HeaderProps {
 }
 
 export const Header: React.FC<HeaderProps> = ({ isLoggedIn, user, onAuthClick, onLogout }) => {
+  const navigate = useNavigate(); // Initialize the navigate function
+
+  const handleLogout = () => {
+    onLogout(); // Call the parent-provided logout function
+    navigate('/'); // Redirect to the home page
+  };
+
   return (
     <header className="bg-gray-900 shadow-lg border-b border-gray-800 sticky top-0 z-50 backdrop-blur-sm bg-opacity-95">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -18,24 +25,35 @@ export const Header: React.FC<HeaderProps> = ({ isLoggedIn, user, onAuthClick, o
           <Link to="/" className="flex items-center space-x-2">
             <Dumbbell className="h-8 w-8 text-orange-500" />
             <span className="text-2xl font-bold text-white">
-              <Link to="/">FitOnGO</Link>
+              FitOnGO
             </span>
           </Link>
           
           {/* Navigation Links */}
           <nav className="hidden md:flex space-x-8">
-            <a href="#gyms" className="text-gray-300 hover:text-orange-500 font-medium transition-colors">
-              Find Gyms
-            </a>
-            <a href="#pricing" className="text-gray-300 hover:text-orange-500 font-medium transition-colors">
-              Pricing
-            </a>
-            <a href="#about" className="text-gray-300 hover:text-orange-500 font-medium transition-colors">
-              About
-            </a>
-            <Link to="/fitpass" className="text-gray-300 hover:text-orange-500 font-medium transition-colors">
-              FitPass
-            </Link>
+            {isLoggedIn ? (
+              <Link
+                to="/userDasboard"
+                className="text-gray-300 hover:text-orange-500 font-medium transition-colors"
+              >
+                Unlock Fitness Everywhere
+              </Link>
+            ) : (
+              <>
+                <a href="#gyms" className="text-gray-300 hover:text-orange-500 font-medium transition-colors">
+                  Find Gyms
+                </a>
+                <a href="#pricing" className="text-gray-300 hover:text-orange-500 font-medium transition-colors">
+                  Pricing
+                </a>
+                <a href="#about" className="text-gray-300 hover:text-orange-500 font-medium transition-colors">
+                  About
+                </a>
+                <Link to="/fitpass" className="text-gray-300 hover:text-orange-500 font-medium transition-colors">
+                  FitPass
+                </Link>
+              </>
+            )}
           </nav>
 
           {/* User Actions */}
@@ -49,7 +67,7 @@ export const Header: React.FC<HeaderProps> = ({ isLoggedIn, user, onAuthClick, o
                   </span>
                 </div>
                 <button
-                  onClick={onLogout}
+                  onClick={handleLogout} // Use the new logout handler
                   className="flex items-center space-x-1 text-gray-400 hover:text-white transition-colors"
                 >
                   <LogOut className="h-4 w-4" />

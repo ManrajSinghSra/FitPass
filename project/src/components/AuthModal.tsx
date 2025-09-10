@@ -6,7 +6,7 @@ import axios from '../config/axios.js';
 
 export const AuthModal = ({ isOpen, onClose, onAuth }) => {
   const [isSignUp, setIsSignUp] = useState(false);
-  const [role, setRole] = useState('user'); // Default role is "user"
+  const [role, setRole] = useState('user');
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -37,7 +37,7 @@ export const AuthModal = ({ isOpen, onClose, onAuth }) => {
         console.log(res.data);
         navigate(role === 'user' ? '/userDasboard' : '/admin');
       } else {
-        // Login Logic
+        
         const loginData = {
           emailId: formData.emailId,
           password: formData.password
@@ -45,15 +45,17 @@ export const AuthModal = ({ isOpen, onClose, onAuth }) => {
 
         const res = await axios.post("/user/login", loginData, { withCredentials: true });
 
-        if(res.data.data.err)
-
-        console.log(res.data);
+        console.log("This is Response",res.data);
         
-       
-        toast.success("Login successful!");
-        console.log("here  ",res.data.data);
-        onAuth(res.data.user);  
-        navigate(res.data.data.role === 'user' ? '/userDasboard' : '/admin');
+
+        if (res.data.error === "Invalid Credentials") {
+          toast.error("Invalid Credentials. Please check your email and password.");
+        } else {
+          toast.success("Login successful!");
+          console.log("User Data: ", res.data.data);
+          onAuth(res.data.data);  
+          navigate(res.data.data.role === 'user' ? '/userDasboard' : '/admin');
+        }
       }
     } catch (error) {
       console.error(error);

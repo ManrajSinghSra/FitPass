@@ -1,34 +1,48 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Header } from '../components/Header';
 import { MapPin, Clock, QrCode, Calendar, TrendingUp, Zap, Star, CreditCard } from 'lucide-react';
+import axios from '../config/axios.js';
+import { toast } from 'react-toastify';
 
 export const UserDashboard = () => {
   const [activeTab, setActiveTab] = useState('overview');
-  const [isLoggedIn, setIsLoggedIn] = useState(true); // Assume user is logged in
-  const [user, setUser] = useState({
-    name: 'Alex Thompson',
-    email: 'alex@example.com',
-    subscription: 'FitPass',
-  });
+  const [isLoggedIn, setIsLoggedIn] = useState(true); 
+  const [user, setUser] = useState(null); 
+  const [stats, setStats] = useState(null); 
+  const [recentGyms, setRecentGyms] = useState([]);
+  const [upcomingBookings, setUpcomingBookings] = useState([]);
 
-  const stats = {
-    workoutsThisMonth: 18,
-    gymVisits: 127,
-    activePlan: user.subscription,
-    tokensUsed: 45,
-    tokensRemaining: 'Unlimited',
-  };
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const res = await axios.get('/user/profile', { withCredentials: true });
+        const userData = res.data.data;
 
-  const recentGyms = [
-    { name: 'Elite Fitness Tokyo', location: 'Shibuya, Tokyo', date: '2025-01-10', rating: 4.8 },
-    { name: 'PowerHouse NYC', location: 'Manhattan, NY', date: '2025-01-08', rating: 4.9 },
-    { name: 'FitZone London', location: 'Central London', date: '2025-01-05', rating: 4.7 },
-  ];
+        // Update state with fetched data
+        setUser({
+          name: userData.name,
+          email: userData.emailId,
+          subscription: userData.subscription || 'FitPass',
+        });
 
-  const upcomingBookings = [
-    { gym: 'Gold\'s Gym Vegas', time: '08:00 AM', date: '2025-01-12', class: 'HIIT Training' },
-    { gym: 'Anytime Fitness', time: '06:30 PM', date: '2025-01-12', class: 'Open Gym' },
-  ];
+        setStats({
+          workoutsThisMonth: userData.stats?.workoutsThisMonth || 0,
+          gymVisits: userData.stats?.gymVisits || 0,
+          activePlan: userData.subscription || 'FitPass',
+          tokensUsed: userData.stats?.tokensUsed || 0,
+          tokensRemaining: userData.stats?.tokensRemaining || 'Unlimited',
+        });
+
+        setRecentGyms(userData.recentGyms || []);
+        setUpcomingBookings(userData.upcomingBookings || []);
+      } catch (error) {
+        console.error('Failed to fetch profile:', error);
+        toast.error('Failed to load profile. Please try again.');
+      }
+    };
+
+    fetchProfile();
+  }, []);
 
   const handleSubscriptionChange = (newSubscription) => {
     setUser((prevUser) => ({
@@ -36,6 +50,14 @@ export const UserDashboard = () => {
       subscription: newSubscription,
     }));
   };
+
+  if (!user || !stats) {
+    return (
+      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+        <p className="text-gray-400">Loading...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-900">
@@ -89,17 +111,6 @@ export const UserDashboard = () => {
               <CreditCard className="h-8 w-8 text-blue-400" />
             </div>
           </div>
-          
-          {/* <div className="bg-gray-800 rounded-xl p-6 border border-gray-700">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-400">Access Tokens</p>
-                <p className="text-2xl font-bold text-white">∞</p>
-                <p className="text-xs text-yellow-400">Unlimited plan</p>
-              </div>
-              <Zap className="h-8 w-8 text-yellow-400" />
-            </div>
-          </div> */}
         </div>
 
         {/* Tabs */}
