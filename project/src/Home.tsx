@@ -7,30 +7,26 @@ import { GymFinder } from './components/GymFinder';
 import { Subscription } from './components/Subscription';
 import { Footer } from './components/Footer';
 import { AuthModal } from './components/AuthModal';
-import axios from "./config/axios.js"
+import axios from "./config/axios.js";
+
 export const Home = ({ onLogin }) => {
   const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
-  const handleAuth = async(userData) => {
+  const handleAuth = async (userData) => {
     setIsLoggedIn(true);
     setUser(userData);
     setIsAuthOpen(false);
-    onLogin();  
+    onLogin();
 
     try {
-          axios.post("/register",userData,{ withCredentials: true })
-          navigate('/dashboard'); 
-      
+      await axios.post("/register", userData, { withCredentials: true });
+      navigate('/dashboard');
     } catch (error) {
       console.log(error);
-      
     }
-    
-
-
   };
 
   return (

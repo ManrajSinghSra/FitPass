@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { X, Mail, Lock, User, Phone } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-
-import axios from "../config/axios.js"
+import { toast } from 'react-toastify';
+import axios from '../config/axios.js';
 
 export const AuthModal = ({ isOpen, onClose, onAuth }) => {
   const [isSignUp, setIsSignUp] = useState(false);
@@ -11,39 +11,54 @@ export const AuthModal = ({ isOpen, onClose, onAuth }) => {
 
   const [formData, setFormData] = useState({
     name: '',
-    email: '',
+    emailId: '',
     phone: '',
     password: ''
   });
 
   if (!isOpen) return null;
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-     
-    if (role === 'user') {
-      navigate('/userDasboard');
-    } 
-    else if (role === 'gymOwner') {
-      navigate('/admin');
-    }
-    console.log(formData);
-
 
     try {
-      
-      const res=
-    } catch (error) {
-      
-    }
-    
-    onAuth({
-      name: formData.name ,
-      email: formData.email,
-      role,
-      subscription: role === 'user' ? 'Traveler' : 'Gym Owner'
-    });
+      if (isSignUp) {
+        // Sign Up Logic
+        const sentData = {
+          name: formData.name,
+          emailId: formData.emailId,
+          phone: formData.phone,
+          password: formData.password,
+          role
+        };
 
+        const res = await axios.post("/user/register", sentData, { withCredentials: true });
+        toast.success("Registration successful!");
+        console.log(res.data);
+        navigate(role === 'user' ? '/userDasboard' : '/admin');
+      } else {
+        // Login Logic
+        const loginData = {
+          emailId: formData.emailId,
+          password: formData.password
+        };
+
+        const res = await axios.post("/user/login", loginData, { withCredentials: true });
+
+        if(res.data.data.err)
+
+        console.log(res.data);
+        
+       
+        toast.success("Login successful!");
+        console.log("here  ",res.data.data);
+        onAuth(res.data.user);  
+        navigate(res.data.data.role === 'user' ? '/userDasboard' : '/admin');
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error(error.response?.data?.message || "Something went wrong!");
+    }
   };
 
   const handleChange = (e) => {
@@ -68,10 +83,9 @@ export const AuthModal = ({ isOpen, onClose, onAuth }) => {
             {isSignUp ? 'Create Account' : 'Welcome Back'}
           </h2>
           <p className="text-gray-300">
-            {isSignUp 
-              ? 'Start your fitness journey today' 
-              : 'Sign in to access your gym network'
-            }
+            {isSignUp
+              ? 'Start your fitness journey today'
+              : 'Sign in to access your gym network'}
           </p>
         </div>
 
@@ -116,20 +130,20 @@ export const AuthModal = ({ isOpen, onClose, onAuth }) => {
               </div>
             </>
           )}
-          
+
           <div className="relative">
             <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
             <input
               type="email"
-              name="email"
+              name="emailId"
               placeholder="Email Address"
-              value={formData.email}
+              value={formData.emailId}
               onChange={handleChange}
               className="w-full pl-10 pr-4 py-3 border border-gray-600 bg-gray-800 text-white rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none placeholder-gray-400"
               required
             />
           </div>
-          
+
           <div className="relative">
             <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
             <input
