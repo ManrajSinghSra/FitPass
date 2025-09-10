@@ -5,6 +5,7 @@ import { UserDashboard } from './pages/UserBashboard';
 import { FitPass } from './pages/FitPass';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'; // Import the toastify CSS
+import GymEqp from './components/GymEquipment';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/userDasboard" element={<UserDashboard />} />
         <Route path="/admin" element={<AdminDashboard />} />
         <Route path="/fitpass" element={<FitPass />} />
+          <Route path="/gymEqup" element={<GymEqp />} />
       </Routes>
       {/* Toast Container */}
       <ToastContainer
