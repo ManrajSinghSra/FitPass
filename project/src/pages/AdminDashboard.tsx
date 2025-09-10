@@ -36,7 +36,7 @@ export const AdminDashboard = () => {
       {/* Add Header */}
       <Header
         isLoggedIn={isLoggedIn}
-        user={user || { name: '', email: '' }} // Provide fallback if user is null
+        user={user || { name: '', email: '' }}  
         onAuthClick={() => {}}
         onLogout={() => {
           setIsLoggedIn(false);

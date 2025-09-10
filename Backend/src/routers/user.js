@@ -39,6 +39,10 @@ userRouter.post(
 // Profile Route
 userRouter.get("/profile", Auth, userC.profile);
 
+
+
+
+//
 // Logout Route
 userRouter.get("/logout", userC.logout);
 

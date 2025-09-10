@@ -6,14 +6,14 @@ import axios from '../config/axios.js';
 
 export const AuthModal = ({ isOpen, onClose, onAuth }) => {
   const [isSignUp, setIsSignUp] = useState(false);
-  const [role, setRole] = useState('user');
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     name: '',
     emailId: '',
     phone: '',
-    password: ''
+    password: '',
+    role: 'user', // Default role is "user"
   });
 
   if (!isOpen) return null;
@@ -29,31 +29,31 @@ export const AuthModal = ({ isOpen, onClose, onAuth }) => {
           emailId: formData.emailId,
           phone: formData.phone,
           password: formData.password,
-          role
+          role: formData.role, // Ensure role is included
         };
+
+        console.log(sentData);
+        
 
         const res = await axios.post("/user/register", sentData, { withCredentials: true });
         toast.success("Registration successful!");
         console.log(res.data);
-        navigate(role === 'user' ? '/userDasboard' : '/admin');
+        navigate(formData.role === 'user' ? '/userDasboard' : '/admin');
       } else {
-        
+        // Login Logic
         const loginData = {
           emailId: formData.emailId,
-          password: formData.password
+          password: formData.password,
         };
 
         const res = await axios.post("/user/login", loginData, { withCredentials: true });
-
-        console.log("This is Response",res.data);
-        
 
         if (res.data.error === "Invalid Credentials") {
           toast.error("Invalid Credentials. Please check your email and password.");
         } else {
           toast.success("Login successful!");
           console.log("User Data: ", res.data.data);
-          onAuth(res.data.data);  
+          onAuth(res.data.data);
           navigate(res.data.data.role === 'user' ? '/userDasboard' : '/admin');
         }
       }
@@ -64,9 +64,10 @@ export const AuthModal = ({ isOpen, onClose, onAuth }) => {
   };
 
   const handleChange = (e) => {
+    const { name, value } = e.target;
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [name]: value,
     });
   };
 
@@ -122,8 +123,8 @@ export const AuthModal = ({ isOpen, onClose, onAuth }) => {
                 <select
                   id="role"
                   name="role"
-                  value={role}
-                  onChange={(e) => setRole(e.target.value)}
+                  value={formData.role}
+                  onChange={handleChange}
                   className="w-full pl-3 pr-4 py-3 border border-gray-600 bg-gray-800 text-white rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none"
                 >
                   <option value="user">User</option>
