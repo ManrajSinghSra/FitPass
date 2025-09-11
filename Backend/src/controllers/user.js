@@ -21,7 +21,7 @@ export const register = async (req, res) => {
       }
       const hashPassword = await User.hashPassword(password)
 
-      const user = await User.create({ name, emailId,role, phone,password: hashPassword })
+      const user = await User.create({ name, emailId,role, phone,password: hashPassword, subscription: "Traveler" })
       res.json({ message: "User is Successfully Created" })
 
    } catch (error) {
@@ -88,6 +88,7 @@ export const logout = (req, res) => {
 export const addUpcomingSession = async (req, res) => {
   try {
     const { gym, time, date } = req.body;
+ 
 
     if (!gym || !time || !date ) {
       return res.status(400).json({ error: "All fields are required" });
@@ -100,7 +101,9 @@ export const addUpcomingSession = async (req, res) => {
     }
  
     const newSession = { gym, time, date };
-    user.upcomingBookings.push(newSession);
+    console.log(newSession);
+    
+    await user.upcomingBookings.push(newSession);
 
     // Save the updated user document
     await user.save();

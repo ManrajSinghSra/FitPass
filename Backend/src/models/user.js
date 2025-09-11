@@ -71,7 +71,7 @@ const userSchema = new mongoose.Schema({
       gym: { type: String, required: true },
       time: { type: String, required: true },
       date: { type: Date, required: true }
-      // class: { type: String, required: true },
+     
     },
   ],
 });
