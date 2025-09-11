@@ -4,6 +4,7 @@ import {
   MapPin,
   Clock,
   QrCode,
+  
   Calendar,
   TrendingUp,
   Star,
@@ -17,6 +18,7 @@ import { toast } from 'react-toastify';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import BookingModal from '../components/BookingModal';
 
 // ----- Custom icons -----
 const redIcon = new L.Icon({
@@ -99,6 +101,14 @@ export const UserDashboard = () => {
 
   const [searchLocation, setSearchLocation] = useState('');
   const [showQRCode, setShowQRCode] = useState(false);
+
+  const [openBooking,setOpenBooking]=useState(false)
+
+
+  const handleOpenBooking=()=>{
+    setOpenBooking(!openBooking)
+  }
+  const onClose=()=>setOpenBooking(false)
 
   // Fetch profile (optional). Keeps defaults if fetch fails.
   useEffect(() => {
@@ -454,8 +464,9 @@ export const UserDashboard = () => {
                   </div>
                 ))}
               </div>
-              <button className="w-full mt-4 bg-purple-600 hover:bg-purple-700 py-2 rounded-lg transition-colors">Book New Session</button>
+              <button className="w-full mt-4 bg-purple-600 hover:bg-purple-700 py-2 rounded-lg transition-colors" onClick={handleOpenBooking}>Book New Session</button>
             </div>
+            <BookingModal isOpen={openBooking} onClose={onClose}/>
           </div>
         )}
 

@@ -40,11 +40,10 @@ userRouter.post(
 userRouter.get("/profile", Auth, userC.profile);
 
 
-
-
-//
 // Logout Route
 userRouter.get("/logout", userC.logout);
 
+// upcoming session
+userRouter.post("/upcomingSession",Auth,userC.addUpcomingSession);
 
 

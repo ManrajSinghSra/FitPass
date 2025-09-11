@@ -4,7 +4,7 @@ import { redisClient } from "../services/redis.js"
 export const register = async (req, res) => {
 
    try {
-      const { name, emailId, password } = req.body;
+      const { name, emailId, password,role,phone } = req.body;
 
       if (!name || !emailId || !password) {
          throw new Error("Fields Cannot be Empty")
@@ -21,7 +21,7 @@ export const register = async (req, res) => {
       }
       const hashPassword = await User.hashPassword(password)
 
-      const user = await User.create({ name, emailId, password: hashPassword })
+      const user = await User.create({ name, emailId,role, phone,password: hashPassword })
       res.json({ message: "User is Successfully Created" })
 
    } catch (error) {
@@ -83,3 +83,31 @@ export const logout = (req, res) => {
    res.clearCookie("token")
    res.json({ "message": "Logout Done" })
 }
+
+
+export const addUpcomingSession = async (req, res) => {
+  try {
+    const { gym, time, date } = req.body;
+
+    if (!gym || !time || !date ) {
+      return res.status(400).json({ error: "All fields are required" });
+    }
+ 
+    const user =req.user
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+ 
+    const newSession = { gym, time, date };
+    user.upcomingBookings.push(newSession);
+
+    // Save the updated user document
+    await user.save();
+
+    res.status(201).json({ message: "Upcoming session added successfully", data: newSession });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+

@@ -40,7 +40,7 @@ export const AuthModal = ({ isOpen, onClose, onAuth }) => {
         console.log(res.data);
         navigate(formData.role === 'user' ? '/userDasboard' : '/admin');
       } else {
-        // Login Logic
+        
         const loginData = {
           emailId: formData.emailId,
           password: formData.password,
